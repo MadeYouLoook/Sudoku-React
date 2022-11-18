@@ -1,0 +1,100 @@
+:root {
+}
+
+.App {
+	font-family: "Lexend Deca", sans-serif;
+	background-color: #212121;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	width: 100vw;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
+
+.boardWrapper {
+	--cellHeight: min(9vh, 9vw);
+	--boardHeight: calc(var(--cellHeight) * 9 + var(--totalGridGap));
+	--cellFontSize: min(6vh, 6vw);
+	--gridGap: 4px;
+	--totalGridGap: calc(var(--gridGap) * 8);
+	--innerBlock: calc(var(--cellHeight) * 3 + var(--gridGap) * 2);
+
+	display: grid;
+	place-items: center;
+}
+
+.boardWrapper > * {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.blockDivider {
+	background-color: #0f0f0f;
+}
+
+.boardBackground {
+	display: grid;
+	grid-template-columns: var(--innerBlock) var(--gridGap) var(--innerBlock) var(--gridGap) var(--innerBlock);
+	grid-template-rows: var(--innerBlock) var(--gridGap) var(--innerBlock) var(--gridGap) var(--innerBlock);
+
+	height: var(--boardHeight);
+	width: var(--boardHeight);
+
+	z-index: 0;
+}
+
+.board {
+	display: grid;
+	grid-template-columns: repeat(9, var(--cellHeight));
+	grid-template-rows: repeat(9, var(--cellHeight));
+	grid-gap: var(--gridGap);
+	z-index: 1;
+}
+
+.cell {
+	display: flex;
+	height: var(--cellHeight);
+	width: var(--cellHeight);
+	justify-content: center;
+	align-items: center;
+	background-color: #1a1a1a;
+	color: #4b4b4b;
+	font-size: var(--cellFontSize);
+	transition: 500ms;
+}
+
+.cell:hover {
+	background-color: #141414;
+	transition: 500ms;
+}
+
+.cell:focus {
+	outline: none;
+	background-color: #141414;
+	transition: 500ms;
+}
+
+.button {
+	padding: 10px 20px;
+	border: none;
+	text-align: center;
+	text-decoration: none;
+	height: fit-content;
+	width: fit-content;
+	background-color: #c77dff;
+	color: white;
+	margin: 50px;
+	border-radius: 10px;
+	font-weight: bold;
+	font-size: 30px;
+}
+
+.button:hover {
+	background-color: #9d4edd;
+	transition: 500ms;
+}

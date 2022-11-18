@@ -1,45 +1,78 @@
-import { useState } from "react";
 import "./App.css";
+import { useState } from "react";
+import { Cell } from "./Cell";
+import { fetchBoard } from "./api/api";
+import * as Types from "./types";
+import * as Boards from "./boards";
 
 function App() {
-	interface sudokuResponse {
-		response: sudokuBoard;
-	}
-
-	interface sudokuBoard {
-		difficulty: string;
-		solution: number[][];
-		unsolvedSudoku: number[][];
-	}
-
-	const [board, setBoard] = useState<number[][]>();
-	const [solution, setsolution] = useState<number[][]>();
-	const [difficulty, setdifficulty] = useState<number[][]>();
-
-	const click = () => {
-		console.log("Button Clicks");
-
-		const url =
-			"https://sudoku-board.p.rapidapi.com/new-board?diff=1&stype=list&solu=true";
-
-		const options = {
-			method: "GET",
-			headers: {
-				"X-RapidAPI-Key": "2974f6fd48msh8ea40f2b6d8698ep125985jsn4812ec4dd5d2",
-				"X-RapidAPI-Host": "sudoku-board.p.rapidapi.com",
-			},
-		};
-
-		fetch(url, options)
-			.then((response) => response.json())
-			.then((json) => {
-				console.log(json.response["solution"]);
-			});
-	};
+	const [board, setBoard] = useState<Types.BoardResponse>(Boards.defaultBoard);
 
 	return (
 		<div className="App">
-			<button onClick={click}> TEST </button>
+			<button
+				className="button"
+				onClick={() => {
+					fetchBoard(setBoard);
+				}}
+			>
+				TEST
+			</button>
+
+			<div className="boardWrapper">
+				<div className="board">
+					{board.unsolvedSudoku.map((row: number[], rowIndex) =>
+						row.map((number: number, columnIndex) => (
+							<Cell
+								key={rowIndex + columnIndex}
+								row={rowIndex}
+								col={columnIndex}
+								board={board}
+								setBoard={setBoard}
+							/>
+						))
+					)}
+				</div>
+
+				<div className="boardBackground">
+					<div
+						className="blockDivider"
+						style={{
+							gridColumnStart: 2,
+							gridColumnEnd: 2,
+							gridRowStart: 1,
+							gridRowEnd: 6,
+						}}
+					/>
+					<div
+						className="blockDivider"
+						style={{
+							gridColumnStart: 4,
+							gridColumnEnd: 4,
+							gridRowStart: 1,
+							gridRowEnd: 6,
+						}}
+					/>
+					<div
+						className="blockDivider"
+						style={{
+							gridColumnStart: 1,
+							gridColumnEnd: 6,
+							gridRowStart: 4,
+							gridRowEnd: 4,
+						}}
+					/>
+					<div
+						className="blockDivider"
+						style={{
+							gridColumnStart: 1,
+							gridColumnEnd: 6,
+							gridRowStart: 2,
+							gridRowEnd: 2,
+						}}
+					/>
+				</div>
+			</div>
 		</div>
 	);
 }
