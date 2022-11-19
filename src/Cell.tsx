@@ -2,14 +2,27 @@ import React, { Component, Dispatch, SetStateAction, createRef} from "react";
 import * as Types from "./types"
 
 interface Props {
-    row: number,
-	col: number;
-	board: Types.BoardResponse;
-    setBoard: Dispatch<SetStateAction<Types.BoardResponse>>;
+    row: number
+	col: number
+	board: Types.BoardResponse
+    setBoard: Dispatch<SetStateAction<Types.BoardResponse>>
 }
 
-export class Cell extends Component<Props> {
+interface State {
+    error: boolean
+}
+
+export class Cell extends Component<Props, State> {
+    private Design = {
+        defaultFontColor: "#4b4b4b",
+        errorFontColor: "#824949",
+    }
+
     ref: React.RefObject<HTMLDivElement>;
+
+    state: State = {
+        error: false
+    }
 
     constructor(props: Props) {
         super(props);
@@ -27,13 +40,24 @@ export class Cell extends Component<Props> {
             this.props.setBoard({...this.props.board, ...{unsolvedSudoku: boardCopy}})
         } else {
             if (e.key === 'Escape') {
-                console.log("here")
                 if (this.ref.current) {
                     this.ref.current.blur()
                 }
             }
         }
 		
+        this.state.error = false
+        for (let i = 0; i < 9; i++) {
+            if (!this.props.board.unsolvedSudoku[this.props.row][this.props.col]) {
+                continue
+            }
+            
+            if (this.props.board.unsolvedSudoku[this.props.row][this.props.col] == this.props.board.unsolvedSudoku[this.props.row][i] && i != this.props.col) {
+                this.state.error = true
+            } else if (this.props.board.unsolvedSudoku[this.props.row][this.props.col] == this.props.board.unsolvedSudoku[i][this.props.col] && i != this.props.row) {
+                this.state.error = true
+            }
+        }
 	}
 
 	render() {
@@ -46,6 +70,9 @@ export class Cell extends Component<Props> {
                     if (e.key === 'Tab') e.preventDefault();
                   }}
 				onKeyUp={(e) => this.keyPressed(e)}
+                style={
+                    {color: this.state.error ? this.Design.errorFontColor : this.Design.defaultFontColor}
+                }
 			>
 				{this.props.board.unsolvedSudoku[this.props.row][this.props.col] ? this.props.board.unsolvedSudoku[this.props.row][this.props.col] : null}
 			</div>

@@ -63,20 +63,24 @@ body {
 	justify-content: center;
 	align-items: center;
 	background-color: #1a1a1a;
-	color: #4b4b4b;
 	font-size: var(--cellFontSize);
-	transition: 500ms;
+	transition: background-color, 500ms;
+	cursor: default;
 }
 
 .cell:hover {
 	background-color: #141414;
-	transition: 500ms;
+	transition: background-color 500ms;
 }
 
 .cell:focus {
 	outline: none;
 	background-color: #141414;
-	transition: 500ms;
+	transition: background-color 500ms;
+}
+
+.cell:active {
+	transition: background-color 500ms;
 }
 
 .button {
