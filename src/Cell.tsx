@@ -1,81 +1,95 @@
-import React, { Component, Dispatch, SetStateAction, createRef} from "react";
-import * as Types from "./types"
+import React, {
+	useState,
+	Dispatch,
+	SetStateAction,
+	useRef,
+	useEffect,
+} from "react";
+import { boardResponse } from "./api/keys";
+import * as Types from "./types";
 
 interface Props {
-    row: number
-	col: number
-	board: Types.BoardResponse
-    setBoard: Dispatch<SetStateAction<Types.BoardResponse>>
+	row: number;
+	col: number;
+	board: number[][];
+	boardResponse: Types.BoardResponse;
+	setBoard: Dispatch<SetStateAction<number[][]>>;
 }
 
-interface State {
-    error: boolean
-}
+export const Cell = (props: Props) => {
+	let Design = {
+		defaultFontColor: "#4b4b4b",
+		errorFontColor: "#824949",
+	};
 
-export class Cell extends Component<Props, State> {
-    private Design = {
-        defaultFontColor: "#4b4b4b",
-        errorFontColor: "#824949",
-    }
+	const [error, setError] = useState(false);
+	const ref = useRef<HTMLDivElement>(null);
+	const locked = props.boardResponse.unsolvedSudoku[props.row][props.col];
 
-    ref: React.RefObject<HTMLDivElement>;
+	useEffect(() => {
+		checkError();
+	});
 
-    state: State = {
-        error: false
-    }
+	const checkError = () => {
+        setError(false)
+		if (locked) return;
+		if (props.board[props.row][props.col] == 0) return;
 
-    constructor(props: Props) {
-        super(props);
-        this.ref = createRef<HTMLDivElement>();
-      }
+		for (let i = 0; i < 9; i++) {
+			if (
+				props.board[props.row][props.col] === props.board[props.row][i] &&
+				i !== props.col
+			) {
+				setError(true);
+			} else if (
+				props.board[props.row][props.col] === props.board[i][props.col] &&
+				i !== props.row
+			) {
+				setError(true);
+			}
+		}
+	};
 
-    keyPressed = (e: React.KeyboardEvent) => {
-        const reg = new RegExp('^[0-9]+$');
+	const keyPressed = (e: React.KeyboardEvent) => {
+		const reg = new RegExp("^[0-9]+$");
 
-        console.log(e.key)
+		console.log(e.key);
+		console.log(props.boardResponse.unsolvedSudoku);
 
-        if (reg.test(e.key)) {
-            let boardCopy = this.props.board.unsolvedSudoku;
-            boardCopy[this.props.row][this.props.col] = parseInt(e.key) === boardCopy[this.props.row][this.props.col] ? 0 : parseInt(e.key);
-            this.props.setBoard({...this.props.board, ...{unsolvedSudoku: boardCopy}})
-        } else {
-            if (e.key === 'Escape') {
-                if (this.ref.current) {
-                    this.ref.current.blur()
-                }
-            }
-        }
-		
-        this.state.error = false
-        for (let i = 0; i < 9; i++) {
-            if (!this.props.board.unsolvedSudoku[this.props.row][this.props.col]) {
-                continue
-            }
-            
-            if (this.props.board.unsolvedSudoku[this.props.row][this.props.col] == this.props.board.unsolvedSudoku[this.props.row][i] && i != this.props.col) {
-                this.state.error = true
-            } else if (this.props.board.unsolvedSudoku[this.props.row][this.props.col] == this.props.board.unsolvedSudoku[i][this.props.col] && i != this.props.row) {
-                this.state.error = true
-            }
-        }
-	}
+		if (!locked && reg.test(e.key)) {
+			let boardCopy = [...props.board];
+			boardCopy[props.row][props.col] =
+				parseInt(e.key) === boardCopy[props.row][props.col]
+					? 0
+					: parseInt(e.key);
+			props.setBoard(boardCopy);
+			console.log("SETTING BOARD");
+		} else {
+			if (e.key === "Escape") {
+				if (ref.current) {
+					ref.current.blur();
+				}
+			}
+		}
+	};
 
-	render() {
-		return (
-			<div
-                ref={this.ref}
-				className="cell"
-				tabIndex={0}
-                onKeyDown={(e) => {
-                    if (e.key === 'Tab') e.preventDefault();
-                  }}
-				onKeyUp={(e) => this.keyPressed(e)}
-                style={
-                    {color: this.state.error ? this.Design.errorFontColor : this.Design.defaultFontColor}
-                }
-			>
-				{this.props.board.unsolvedSudoku[this.props.row][this.props.col] ? this.props.board.unsolvedSudoku[this.props.row][this.props.col] : null}
-			</div>
-		);
-	}
-}
+	return (
+		<div
+			ref={ref}
+			className="cell"
+			tabIndex={0}
+			onKeyDown={(e) => {
+				if (e.key === "Tab") e.preventDefault();
+			}}
+			onKeyUp={(e) => keyPressed(e)}
+			style={{
+				color:
+					error && !locked ? Design.errorFontColor : Design.defaultFontColor,
+			}}
+		>
+			{props.board[props.row][props.col]
+				? props.board[props.row][props.col]
+				: " "}
+		</div>
+	);
+};

@@ -64,23 +64,17 @@ body {
 	align-items: center;
 	background-color: #1a1a1a;
 	font-size: var(--cellFontSize);
-	transition: background-color, 500ms;
+	transition: background-color 500ms;
 	cursor: default;
 }
 
 .cell:hover {
 	background-color: #141414;
-	transition: background-color 500ms;
 }
 
 .cell:focus {
 	outline: none;
 	background-color: #141414;
-	transition: background-color 500ms;
-}
-
-.cell:active {
-	transition: background-color 500ms;
 }
 
 .button {

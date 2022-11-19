@@ -6,14 +6,50 @@ import * as Types from "./types";
 import * as Boards from "./boards";
 
 function App() {
-	const [board, setBoard] = useState<Types.BoardResponse>(Boards.defaultBoard);
+	const [board, setBoard] = useState<number[][]>([
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0, 0],
+	]);
+	const [boardResponse, setBoardResponse] = useState<Types.BoardResponse>({
+		difficulty: 1,
+		solution: [
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		],
+		unsolvedSudoku: [
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
+		],
+	});
 
 	return (
 		<div className="App">
 			<button
 				className="button"
 				onClick={() => {
-					fetchBoard(setBoard);
+					console.log("CLICK NEW BOARD")
+					fetchBoard(setBoard, setBoardResponse);
 				}}
 			>
 				TEST
@@ -21,7 +57,7 @@ function App() {
 
 			<div className="boardWrapper">
 				<div className="board">
-					{board.unsolvedSudoku.map((row: number[], rowIndex) =>
+					{board.map((row: number[], rowIndex) =>
 						row.map((number: number, columnIndex) => (
 							<Cell
 								key={rowIndex + columnIndex}
@@ -29,6 +65,7 @@ function App() {
 								col={columnIndex}
 								board={board}
 								setBoard={setBoard}
+								boardResponse={boardResponse}
 							/>
 						))
 					)}
