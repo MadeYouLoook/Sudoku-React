@@ -5,8 +5,7 @@ import React, {
 	useRef,
 	useEffect,
 } from "react";
-import { boardResponse } from "./api/keys";
-import * as Types from "./types";
+import * as Types from "../api/types";
 
 interface Props {
 	row: number;
@@ -27,28 +26,28 @@ export const Cell = (props: Props) => {
 	const locked = props.boardResponse.unsolvedSudoku[props.row][props.col];
 
 	useEffect(() => {
-		checkError();
-	});
+		const checkError = () => {
+			setError(false);
+			if (locked) return;
+			if (!props.board[props.row][props.col]) return;
 
-	const checkError = () => {
-        setError(false)
-		if (locked) return;
-		if (props.board[props.row][props.col] == 0) return;
-
-		for (let i = 0; i < 9; i++) {
-			if (
-				props.board[props.row][props.col] === props.board[props.row][i] &&
-				i !== props.col
-			) {
-				setError(true);
-			} else if (
-				props.board[props.row][props.col] === props.board[i][props.col] &&
-				i !== props.row
-			) {
-				setError(true);
+			for (let i = 0; i < 9; i++) {
+				if (
+					props.board[props.row][props.col] === props.board[props.row][i] &&
+					i !== props.col
+				) {
+					setError(true);
+				} else if (
+					props.board[props.row][props.col] === props.board[i][props.col] &&
+					i !== props.row
+				) {
+					setError(true);
+				}
 			}
-		}
-	};
+		};
+
+		checkError();
+	}, [props.board, locked, props.row, props.col]);
 
 	const keyPressed = (e: React.KeyboardEvent) => {
 		const reg = new RegExp("^[0-9]+$");
@@ -63,7 +62,6 @@ export const Cell = (props: Props) => {
 					? 0
 					: parseInt(e.key);
 			props.setBoard(boardCopy);
-			console.log("SETTING BOARD");
 		} else {
 			if (e.key === "Escape") {
 				if (ref.current) {

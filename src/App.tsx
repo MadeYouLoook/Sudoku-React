@@ -1,54 +1,25 @@
 import "./App.css";
 import { useState } from "react";
-import { Cell } from "./Cell";
+import { Cell } from "./components/cell";
 import { fetchBoard } from "./api/api";
-import * as Types from "./types";
-import * as Boards from "./boards";
+import { BoardBackground } from "./components/boardBackground"
+import * as Types from "./api/types";
+import * as Boards from "./utility/boards";
+import * as Utility from "./utility/utility";
 
 function App() {
-	const [board, setBoard] = useState<number[][]>([
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-	]);
-	const [boardResponse, setBoardResponse] = useState<Types.BoardResponse>({
-		difficulty: 1,
-		solution: [
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		],
-		unsolvedSudoku: [
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		],
-	});
+	const [board, setBoard] = useState<number[][]>(
+		Utility.deepCopy(Boards.blankBoard)
+	);
+	const [boardResponse, setBoardResponse] = useState<Types.BoardResponse>(
+		Utility.deepCopy(Boards.defaultBoard)
+	);
 
 	return (
 		<div className="App">
 			<button
 				className="button"
 				onClick={() => {
-					console.log("CLICK NEW BOARD")
 					fetchBoard(setBoard, setBoardResponse);
 				}}
 			>
@@ -71,44 +42,7 @@ function App() {
 					)}
 				</div>
 
-				<div className="boardBackground">
-					<div
-						className="blockDivider"
-						style={{
-							gridColumnStart: 2,
-							gridColumnEnd: 2,
-							gridRowStart: 1,
-							gridRowEnd: 6,
-						}}
-					/>
-					<div
-						className="blockDivider"
-						style={{
-							gridColumnStart: 4,
-							gridColumnEnd: 4,
-							gridRowStart: 1,
-							gridRowEnd: 6,
-						}}
-					/>
-					<div
-						className="blockDivider"
-						style={{
-							gridColumnStart: 1,
-							gridColumnEnd: 6,
-							gridRowStart: 4,
-							gridRowEnd: 4,
-						}}
-					/>
-					<div
-						className="blockDivider"
-						style={{
-							gridColumnStart: 1,
-							gridColumnEnd: 6,
-							gridRowStart: 2,
-							gridRowEnd: 2,
-						}}
-					/>
-				</div>
+				<BoardBackground/>
 			</div>
 		</div>
 	);
