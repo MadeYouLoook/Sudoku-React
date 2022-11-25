@@ -34,7 +34,6 @@ export function fetchBoard(
 		},
 	};
 
-	console.log("BEG FETCH");
 	fetch(url, options)
 		.then((response) => response.json())
 		.then((json) => {
@@ -42,8 +41,6 @@ export function fetchBoard(
 			setBoard(JSON.parse(JSON.stringify(sudoku.unsolvedSudoku)));
 			setBoardResponse(JSON.parse(JSON.stringify(sudoku)));
 		});
-
-	console.log("END FETCH");
-
+		
 	return Boards.defaultBoard;
 }

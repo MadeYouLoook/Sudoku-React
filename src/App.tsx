@@ -14,6 +14,7 @@ function App() {
 	const [boardResponse, setBoardResponse] = useState<Types.BoardResponse>(
 		Utility.deepCopy(Boards.defaultBoard)
 	);
+	const [focus, setFocus] = useState<[number, number]>([-1, -1]);
 
 	return (
 		<div className="App">
@@ -34,9 +35,12 @@ function App() {
 								key={rowIndex + columnIndex}
 								row={rowIndex}
 								col={columnIndex}
+								position={[rowIndex, columnIndex]}
 								board={board}
 								setBoard={setBoard}
 								boardResponse={boardResponse}
+								currentFocus={focus}
+								setFocus={setFocus}
 							/>
 						))
 					)}
