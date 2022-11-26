@@ -1,4 +1,4 @@
-import * as Types from "../api/types";
+import * as Types from "../types";
 
 export const defaultBoard: Types.BoardResponse = {
 	difficulty: 1,

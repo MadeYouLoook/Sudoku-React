@@ -3,3 +3,8 @@ export interface BoardResponse {
 	solution: number[][];
 	unsolvedSudoku: number[][];
 }
+
+export interface Index {
+	row: number;
+	col: number;
+}

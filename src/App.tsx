@@ -1,9 +1,9 @@
 import "./App.css";
 import { useState } from "react";
 import { Cell } from "./components/cell";
-import { fetchBoard } from "./api/api";
-import { BoardBackground } from "./components/boardBackground"
-import * as Types from "./api/types";
+import { fetchBoard } from "./api";
+import { BoardBackground } from "./components/boardBackground";
+import * as Types from "./types";
 import * as Boards from "./utility/boards";
 import * as Utility from "./utility/utility";
 
@@ -14,7 +14,7 @@ function App() {
 	const [boardResponse, setBoardResponse] = useState<Types.BoardResponse>(
 		Utility.deepCopy(Boards.defaultBoard)
 	);
-	const [focus, setFocus] = useState<[number, number]>([-1, -1]);
+	const [focus, setFocus] = useState<Types.Index>({row: -1, col: -1});
 
 	return (
 		<div className="App">
@@ -33,9 +33,7 @@ function App() {
 						row.map((number: number, columnIndex) => (
 							<Cell
 								key={rowIndex + columnIndex}
-								row={rowIndex}
-								col={columnIndex}
-								position={[rowIndex, columnIndex]}
+								position={{ row: rowIndex, col: columnIndex }}
 								board={board}
 								setBoard={setBoard}
 								boardResponse={boardResponse}
@@ -46,7 +44,7 @@ function App() {
 					)}
 				</div>
 
-				<BoardBackground/>
+				<BoardBackground />
 			</div>
 		</div>
 	);

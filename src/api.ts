@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import * as Types from "./types";
-import * as Boards from "../utility/boards";
+import * as Boards from "./utility/boards";
 import * as Keys from "./keys";
 
 function newBoard(json: any): Types.BoardResponse {
@@ -41,6 +41,6 @@ export function fetchBoard(
 			setBoard(JSON.parse(JSON.stringify(sudoku.unsolvedSudoku)));
 			setBoardResponse(JSON.parse(JSON.stringify(sudoku)));
 		});
-		
+
 	return Boards.defaultBoard;
 }
