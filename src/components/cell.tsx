@@ -77,6 +77,19 @@ export const Cell = (props: Props) => {
 			}
 		}
 
+		let startingRow = Math.floor(props.position.row / 3) * 3
+		let startingCol = Math.floor(props.position.col / 3) * 3
+		for (let row = startingRow; row < startingRow + 3; row++){
+			for (let col = startingCol; col < startingCol + 3; col++){
+				if (row === props.position.row && col === props.position.col) {
+					
+				} else if (props.board[row][col] === currentCell) {
+					setError(true);
+					return true;
+				}
+			}
+		}
+
 		setError(false);
 		return false;
 	}, [props.board, props.position]);
@@ -94,7 +107,6 @@ export const Cell = (props: Props) => {
 					: parseInt(e.key);
 			props.setBoard(boardCopy);
 
-			console.log(isError());
 		} else {
 			if (e.key === "Escape") {
 				// used to remove the focus so that onFocus doesnt just
@@ -130,8 +142,7 @@ export const Cell = (props: Props) => {
 
 	// updating background color when new cell is placed
 	useEffect(() => {
-		if (props.board[props.position.row][props.position.col] === 0) {
-		} else if (isFocused()) {
+		if (isFocused()) {
 			setBackgroundColor(Color.Cell.focus);
 		} else if (isError()) {
 			setBackgroundColor(Color.Cell.error);
@@ -161,7 +172,6 @@ export const Cell = (props: Props) => {
 			}}
 			onFocus={() => {
 				props.setFocus(props.position);
-				console.log(error);
 			}}
 			onBlur={() => {
 				props.setFocus({ row: -1, col: -1 });

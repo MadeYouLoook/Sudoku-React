@@ -76,6 +76,8 @@ body {
 	font-size: var(--cellFontSize);
 	transition: background-color 400ms;
 	cursor: default;
+
+	user-select: none;
 }
 
 .cell:focus {
