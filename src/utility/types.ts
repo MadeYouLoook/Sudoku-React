@@ -4,7 +4,7 @@ export interface BoardResponse {
 	unsolvedSudoku: number[][];
 }
 
-export interface Index {
+export interface Position {
 	row: number;
 	col: number;
 }

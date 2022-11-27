@@ -1,19 +1,20 @@
 import { Dispatch, SetStateAction } from "react";
-import * as Types from "./types";
-import * as Boards from "./utility/boards";
-import * as Keys from "./keys";
+import * as Types from "./utility/types";
+import { BoardResponse } from "./utility/defaults";
+import * as Keys from "./utility/keys";
+import { deepCopy } from "./utility/utility";
 
 function newBoard(json: any): Types.BoardResponse {
-	let board = { ...Boards.defaultBoard };
+	let board = BoardResponse.default;
 
-	if (Keys.boardResponse.difficulty in json) {
-		board.difficulty = json[Keys.boardResponse.difficulty];
+	if (Keys.BoardResponseKeys.difficulty in json) {
+		board.difficulty = json[Keys.BoardResponseKeys.difficulty];
 	}
-	if (Keys.boardResponse.solution in json) {
-		board.solution = json[Keys.boardResponse.solution];
+	if (Keys.BoardResponseKeys.solution in json) {
+		board.solution = json[Keys.BoardResponseKeys.solution];
 	}
-	if (Keys.boardResponse.unsolvedSudoku in json) {
-		board.unsolvedSudoku = json[Keys.boardResponse.unsolvedSudoku];
+	if (Keys.BoardResponseKeys.unsolvedSudoku in json) {
+		board.unsolvedSudoku = json[Keys.BoardResponseKeys.unsolvedSudoku];
 	}
 
 	return board;
@@ -38,9 +39,9 @@ export function fetchBoard(
 		.then((response) => response.json())
 		.then((json) => {
 			let sudoku = newBoard(json.response);
-			setBoard(JSON.parse(JSON.stringify(sudoku.unsolvedSudoku)));
-			setBoardResponse(JSON.parse(JSON.stringify(sudoku)));
+			setBoard(deepCopy(sudoku.unsolvedSudoku));
+			setBoardResponse(deepCopy(sudoku));
 		});
 
-	return Boards.defaultBoard;
+	return BoardResponse.default;
 }

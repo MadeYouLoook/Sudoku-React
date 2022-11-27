@@ -9,4 +9,5 @@ export const Cell = {
 	hover: "#121212",
 	error: "#862A1740",
 	focus: "#c3d7ea",
+	highlighted: "#c3d7ea",
 };

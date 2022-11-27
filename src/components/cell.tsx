@@ -6,17 +6,17 @@ import React, {
 	useEffect,
 	useCallback,
 } from "react";
-import * as Types from "../types";
+import * as Types from "../utility/types";
 import * as Color from "../colors";
-import { boardResponse } from "../keys";
+import { BoardResponseKeys } from "../utility/keys";
 
 interface Props {
-	position: Types.Index;
+	position: Types.Position;
 	board: number[][];
 	boardResponse: Types.BoardResponse;
 	setBoard: Dispatch<SetStateAction<number[][]>>;
-	currentFocus: Types.Index;
-	setFocus: Dispatch<SetStateAction<Types.Index>>;
+	currentFocus: Types.Position;
+	setFocus: Dispatch<SetStateAction<Types.Position>>;
 }
 
 export const Cell = (props: Props) => {
@@ -31,17 +31,6 @@ export const Cell = (props: Props) => {
 		? props.board[props.position.row][props.position.col]
 		: " ";
 
-	const isFocused = useCallback(() => {
-		return (
-			props.position.col === props.currentFocus.col &&
-			props.position.row === props.currentFocus.row
-		);
-	}, [props.position, props.currentFocus]);
-
-	/* const updateLocked = () => {
-		locked = props.boardResponse.unsolvedSudoku[props.position.row][props.position.col];
-	}; */
-
 	const setNewLockedCells = useCallback(() => {
 		setTextColor(Color.Font.default);
 
@@ -52,6 +41,13 @@ export const Cell = (props: Props) => {
 			return;
 		}
 	}, [locked, props.board, props.position]);
+
+	const isFocused = useCallback(() => {
+		return (
+			props.position.col === props.currentFocus.col &&
+			props.position.row === props.currentFocus.row
+		);
+	}, [props.position, props.currentFocus]);
 
 	const isError = useCallback(() => {
 		if (!props.board[props.position.row][props.position.col]) {
@@ -77,12 +73,11 @@ export const Cell = (props: Props) => {
 			}
 		}
 
-		let startingRow = Math.floor(props.position.row / 3) * 3
-		let startingCol = Math.floor(props.position.col / 3) * 3
-		for (let row = startingRow; row < startingRow + 3; row++){
-			for (let col = startingCol; col < startingCol + 3; col++){
+		let startingRow = Math.floor(props.position.row / 3) * 3;
+		let startingCol = Math.floor(props.position.col / 3) * 3;
+		for (let row = startingRow; row < startingRow + 3; row++) {
+			for (let col = startingCol; col < startingCol + 3; col++) {
 				if (row === props.position.row && col === props.position.col) {
-					
 				} else if (props.board[row][col] === currentCell) {
 					setError(true);
 					return true;
@@ -93,6 +88,32 @@ export const Cell = (props: Props) => {
 		setError(false);
 		return false;
 	}, [props.board, props.position]);
+
+	const isHighlighted = useCallback(() => {
+		// if they are the same cell dont highlight
+		if (props.currentFocus === props.position) return false;
+		if (props.currentFocus.row === -1 || props.currentFocus.col === -1)
+			return false;
+
+		let currentCell = props.board[props.position.row][props.position.col];
+		let focusedCell =
+			props.board[props.currentFocus.row][props.currentFocus.col];
+
+		if (focusedCell === 0) return false;
+		if (currentCell === focusedCell) return true;
+		return false;
+	}, [props.board, props.position, props.currentFocus]);
+
+	const updateHover = (enter: boolean) => {
+		if (isFocused()) return;
+		if (error) {
+			setBackgroundColor(Color.Cell.error);
+		} else if (isHighlighted()) {
+			setBackgroundColor(Color.Cell.highlighted);
+		} else {
+			setBackgroundColor(enter ? Color.Cell.hover : Color.Cell.default);
+		}
+	};
 
 	const keyPressed = (e: React.KeyboardEvent) => {
 		const reg = new RegExp("^[0-9]+$");
@@ -106,7 +127,6 @@ export const Cell = (props: Props) => {
 					? 0
 					: parseInt(e.key);
 			props.setBoard(boardCopy);
-
 		} else {
 			if (e.key === "Escape") {
 				// used to remove the focus so that onFocus doesnt just
@@ -118,17 +138,6 @@ export const Cell = (props: Props) => {
 		}
 	};
 
-	const updateHover = (enter: boolean) => {
-		if (isFocused()) return;
-		if (error) {
-			setBackgroundColor(enter ? Color.Cell.hover : Color.Cell.error);
-		} else {
-			setBackgroundColor(enter ? Color.Cell.hover : Color.Cell.default);
-		}
-
-		
-	};
-
 	useEffect(() => {}, [props.board]);
 
 	// when a new board is loaded
@@ -136,16 +145,16 @@ export const Cell = (props: Props) => {
 		setNewLockedCells();
 	}, [props.boardResponse, setNewLockedCells]);
 
-	useEffect(() => {
-		setBackgroundColor(isFocused() ? Color.Cell.focus : Color.Cell.default);
-	}, [props.currentFocus, isFocused]);
-
-	// updating background color when new cell is placed
+	// updating background color when:
+	// - new cell placed
+	// - focus changed
 	useEffect(() => {
 		if (isFocused()) {
 			setBackgroundColor(Color.Cell.focus);
 		} else if (isError()) {
 			setBackgroundColor(Color.Cell.error);
+		} else if (isHighlighted()) {
+			setBackgroundColor(Color.Cell.highlighted);
 		} else {
 			setBackgroundColor(Color.Cell.default);
 		}

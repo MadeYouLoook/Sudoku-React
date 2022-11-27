@@ -3,18 +3,18 @@ import { useState } from "react";
 import { Cell } from "./components/cell";
 import { fetchBoard } from "./api";
 import { BoardBackground } from "./components/boardBackground";
-import * as Types from "./types";
-import * as Boards from "./utility/boards";
+import * as Types from "./utility/types";
+import { BoardResponse, Boards, Position } from "./utility/defaults";
 import * as Utility from "./utility/utility";
 
 function App() {
 	const [board, setBoard] = useState<number[][]>(
-		Utility.deepCopy(Boards.blankBoard)
+		Utility.deepCopy(Boards.blank)
 	);
 	const [boardResponse, setBoardResponse] = useState<Types.BoardResponse>(
-		Utility.deepCopy(Boards.defaultBoard)
+		Utility.deepCopy(BoardResponse.default)
 	);
-	const [focus, setFocus] = useState<Types.Index>({row: -1, col: -1});
+	const [focus, setFocus] = useState<Types.Position>(Position.null);
 
 	return (
 		<div className="App">
