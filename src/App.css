@@ -36,7 +36,6 @@ body {
 	/* calc(var(--boardHeight) + var(--gridGap) * 2); */
 	background-color: var(--gridLineColor);
 	border: 4px solid var(--blockGridLineColor);
-	
 }
 
 .boardWrapper > * {
@@ -50,8 +49,12 @@ body {
 
 .boardBackground {
 	display: grid;
-	grid-template-columns: var(--innerBlock) var(--gridGap) var(--innerBlock) var(--gridGap) var(--innerBlock);
-	grid-template-rows: var(--innerBlock) var(--gridGap) var(--innerBlock) var(--gridGap) var(--innerBlock);
+	grid-template-columns:
+		var(--innerBlock) var(--gridGap) var(--innerBlock) var(--gridGap)
+		var(--innerBlock);
+	grid-template-rows:
+		var(--innerBlock) var(--gridGap) var(--innerBlock) var(--gridGap)
+		var(--innerBlock);
 
 	height: var(--boardHeight);
 	width: var(--boardHeight);
@@ -67,22 +70,43 @@ body {
 	z-index: 1;
 }
 
-.cell {
-	display: flex;
+.cellWrapper {
+	position: relative;
 	height: var(--cellHeight);
 	width: var(--cellHeight);
-	justify-content: center;
-	align-items: center;
-	font-size: var(--cellFontSize);
 	transition: background-color 400ms;
-	cursor: default;
-
 	user-select: none;
+
+	cursor: default;
+	outline: none;
 }
 
-.cell:focus {
-	outline: none;
-	background-color: var(--cellFocusColor);
+.cell {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1;
+	font-size: var(--cellFontSize);
+}
+
+.notes {
+	height: 100%;
+	width: 100%;
+	z-index: 0;
+	display: grid;
+	grid-template-columns: repeat(3, calc(var(--cellHeight) / 3));
+	grid-template-rows: repeat(3, calc(var(--cellHeight) / 3));
+}
+
+.note {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .button {

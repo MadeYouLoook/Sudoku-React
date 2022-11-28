@@ -6,9 +6,9 @@ import React, {
 	useEffect,
 	useCallback,
 } from "react";
+import { Notes } from "./notes"
 import * as Types from "../utility/types";
 import * as Color from "../colors";
-import { BoardResponseKeys } from "../utility/keys";
 
 interface Props {
 	position: Types.Position;
@@ -129,8 +129,7 @@ export const Cell = (props: Props) => {
 			props.setBoard(boardCopy);
 		} else {
 			if (e.key === "Escape") {
-				// used to remove the focus so that onFocus doesnt just
-				// refocus right away
+				// used to remove the focus so that onFocus doesnt just re-focus right away
 				if (ref.current) {
 					ref.current.blur();
 				}
@@ -158,12 +157,12 @@ export const Cell = (props: Props) => {
 		} else {
 			setBackgroundColor(Color.Cell.default);
 		}
-	}, [props.board, props.position, isError, isFocused]);
+	}, [props.board, props.position, isError, isFocused, isHighlighted]);
 
 	return (
 		<div
 			ref={ref}
-			className="cell"
+			className="cellWrapper"
 			tabIndex={0}
 			onKeyDown={(e) => {
 				if (e.key === "Tab") e.preventDefault();
@@ -186,7 +185,11 @@ export const Cell = (props: Props) => {
 				props.setFocus({ row: -1, col: -1 });
 			}}
 		>
-			{number}
+			<div className="cell">
+				{number}
+			</div>
+
+			<Notes></Notes>
 		</div>
 	);
 };
