@@ -25,7 +25,7 @@ export class BoardResponse {
 			[0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0],
 		],
-	}
+	};
 
 	static test: Types.BoardResponse = {
 		difficulty: 1,
@@ -51,11 +51,11 @@ export class BoardResponse {
 			[0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 9],
 		],
-	}
-};
+	};
+}
 
 export class Boards {
-	static blank: number[][] =  [
+	static blank: number[][] = [
 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -65,9 +65,17 @@ export class Boards {
 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-	]
-};
+	];
+}
 
 export class Position {
-	static null: Types.Position = { row: -1, col: -1 }
-};
+	static null: Types.Position = { row: -1, col: -1 };
+}
+
+export class Options {
+	static default: Types.Options = {
+		note: true,
+		highlightRow: false,
+		highlighBlock: false,
+	}
+}

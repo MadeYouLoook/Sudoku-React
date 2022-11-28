@@ -6,9 +6,10 @@ import React, {
 	useEffect,
 	useCallback,
 } from "react";
-import { Notes } from "./notes"
+import { Notes } from "./notes";
 import * as Types from "../utility/types";
 import * as Color from "../colors";
+import { Options } from "../utility/defaults";
 
 interface Props {
 	position: Types.Position;
@@ -17,12 +18,15 @@ interface Props {
 	setBoard: Dispatch<SetStateAction<number[][]>>;
 	currentFocus: Types.Position;
 	setFocus: Dispatch<SetStateAction<Types.Position>>;
+	options: Types.Options;
+	setOptions: Dispatch<SetStateAction<Types.Options>>;
 }
 
 export const Cell = (props: Props) => {
 	const [textColor, setTextColor] = useState(Color.Font.default);
 	const [backgroundColor, setBackgroundColor] = useState(Color.Cell.default);
 	const [error, setError] = useState(false);
+	const [notes, setNotes] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
 	const ref = useRef<HTMLDivElement>(null);
 	let locked =
@@ -121,12 +125,19 @@ export const Cell = (props: Props) => {
 		console.log(e.key);
 
 		if (!locked && reg.test(e.key)) {
-			let boardCopy = [...props.board];
-			boardCopy[props.position.row][props.position.col] =
-				parseInt(e.key) === boardCopy[props.position.row][props.position.col]
-					? 0
-					: parseInt(e.key);
-			props.setBoard(boardCopy);
+			if (!props.options.note) {
+				let boardCopy = [...props.board];
+				boardCopy[props.position.row][props.position.col] =
+					parseInt(e.key) === boardCopy[props.position.row][props.position.col]
+						? 0
+						: parseInt(e.key);
+				props.setBoard(boardCopy);
+			} else {
+				let notesCopy = [...notes];
+				let inputNote = parseInt(e.key) - 1
+				notesCopy[inputNote] = notesCopy[inputNote] === inputNote + 1 ? 0 : inputNote + 1;
+				setNotes(notesCopy);
+			}
 		} else {
 			if (e.key === "Escape") {
 				// used to remove the focus so that onFocus doesnt just re-focus right away
@@ -185,11 +196,9 @@ export const Cell = (props: Props) => {
 				props.setFocus({ row: -1, col: -1 });
 			}}
 		>
-			<div className="cell">
-				{number}
-			</div>
+			<div className="cell">{number}</div>
 
-			<Notes></Notes>
+			<Notes notes={notes} setNotes={setNotes} />
 		</div>
 	);
 };

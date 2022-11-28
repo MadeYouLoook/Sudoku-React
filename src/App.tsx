@@ -4,7 +4,7 @@ import { Cell } from "./components/cell";
 import { fetchBoard } from "./api";
 import { BoardBackground } from "./components/boardBackground";
 import * as Types from "./utility/types";
-import { BoardResponse, Boards, Position } from "./utility/defaults";
+import { BoardResponse, Boards, Position, Options } from "./utility/defaults";
 import * as Utility from "./utility/utility";
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
 		Utility.deepCopy(BoardResponse.default)
 	);
 	const [focus, setFocus] = useState<Types.Position>(Position.null);
+	const [options, setOptions] = useState<Types.Options>(Options.default);
 
 	return (
 		<div className="App">
@@ -39,6 +40,8 @@ function App() {
 								boardResponse={boardResponse}
 								currentFocus={focus}
 								setFocus={setFocus}
+								options={options}
+								setOptions={setOptions}
 							/>
 						))
 					)}

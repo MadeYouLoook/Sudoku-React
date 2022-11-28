@@ -21,6 +21,7 @@ body {
 	--cellHeight: min(9vh, 9vw);
 	--boardHeight: calc(var(--cellHeight) * 9 + var(--totalGridGap));
 	--cellFontSize: min(6vh, 6vw);
+	--cellNoteSize: calc(var(var(--cellFontSize) / 3));
 	--gridGap: 4px;
 	--totalGridGap: calc(var(--gridGap) * 8);
 	--innerBlock: calc(var(--cellHeight) * 3 + var(--gridGap) * 2);
@@ -107,6 +108,8 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	font-size: var(--cellNoteSize);
 }
 
 .button {
